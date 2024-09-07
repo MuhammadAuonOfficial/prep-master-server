@@ -8,7 +8,7 @@ const generateToken = (user) => {
         id: user.id, // Subject (user ID)
         name: user.username,
         email: user.email,
-        // role: user.role.name,
+        role: user.roleId,
         // permissions: user.permissions For future use
     };
 
