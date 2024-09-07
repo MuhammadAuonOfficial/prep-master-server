@@ -17,7 +17,7 @@ const getTestSeries = async (req, res, next) => {
 
 const getAllTestSeries = async (req, res, next) => {
     try {
-        const TestSeriess = await testSeriesService.getTestSeriess();
+        const TestSeriess = await testSeriesService.getAllTestSeries();
         const response = Response.success('TestSeriess found', TestSeriess, 200);
         res.status(response.statusCode).json(response);
     } catch (error) {

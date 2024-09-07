@@ -24,7 +24,7 @@ const fieldMapping = {
 }
 
 
-class UserModel {
+class testSeriesModel {
     constructor() {
         this.pool = poolPromise;
     }
@@ -92,29 +92,23 @@ class UserModel {
         }
     }
     
-    async updateTestSeries(seriesId, series) {
+    async updateTestSeries(id, series) {
         const updateQuery = `
             UPDATE ${schema.tableName} SET 
             ${schema.columns.name} = @name, 
             ${schema.columns.userId} = @userId, 
             ${schema.columns.price} = @price, 
             ${schema.columns.status} = @status, 
-            WHERE ${schema.columns.id} = @seriesId`;
+            WHERE ${schema.columns.id} = @id`;
     
         try {
             const pool = await this.pool;
             const result = await pool.request()
-                .input('seriesId', sql.Int, seriesId)
+                .input('id', sql.Int, id)
                 .input('name', sql.NVarChar, series.name)
                 .input('userId', sql.Int, series.userId)
                 .input('price', sql.Decimal(10, 2), series.price)
                 .input('status', sql.NVarChar, series.status)
-                .input('isActive', sql.Bit, series.isActive)
-                .input('isDelete', sql.Bit, series.isDelete)
-                .input('createdBy', sql.Int, series.createdBy)
-                .input('createdDate', sql.DateTime, series.createdDate)  // Note: Normally not updated but included if needed
-                .input('updatedBy', sql.Int, series.updatedBy)
-                .input('updatedDate', sql.DateTime, new Date())  // Automatically set the update date to now
                 .query(updateQuery);
     
             if (result.rowsAffected[0] > 0) {
@@ -184,4 +178,4 @@ class UserModel {
 
 }
 
-module.exports = new TestSeriesModel;
+module.exports = new testSeriesModel;

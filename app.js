@@ -15,6 +15,7 @@ const errorHandler = require('./src/middleware/errorHandler');
 // Routes
 const userRoutes = require('./src/routes/userRoutes');
 const authRoutes = require('./src/routes/authRoutes');
+const testSeriesRoutes = require('./src/routes/testSeriesRoutes');
 
 
 
@@ -32,6 +33,7 @@ app.use(express.json());
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/test_series', testSeriesRoutes);
 
 app.use(errorHandler);
 
