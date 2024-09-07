@@ -19,7 +19,7 @@ const getTestSeries = async (TestSeriesId) => {
 }
 
 const getAllTestSeries = async () => {
-    const TestSeriess = await TestSeriesModel.getTestSeriess();
+    const TestSeriess = await TestSeriesModel.getTestSeries();
 
     return TestSeriess;
 }
