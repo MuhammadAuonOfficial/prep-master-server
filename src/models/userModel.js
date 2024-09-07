@@ -3,30 +3,51 @@ const { poolPromise } = require('../database/db');
 const mapFields = require('../utils/fieldMapper');
 
 const schema = {
-    tableName: 'Users',
+    tableName: 'tb_User',
     columns: {
         id: 'Id',
-        name: 'Name',
-        username: 'Username',
+        firstName: 'FirstName',
+        middleName: 'MiddleName',
+        lastName: 'LastName',
         email: 'Email',
         password: 'Password',
         role: 'RoleId',
-        position: 'PositionId',
-        created: 'CreatedAt',
-        updated: 'UpdatedAt'
+        gender: 'Gender',
+        phone: 'Phone',
+        address: 'Address',
+
+        // isActive: 'IsActive',
+        // isDelete: 'IsDelete',
+        status: 'Status'
+
+        // createdBy: 'CreatedBy',
+        // createdDate: 'CreatedDate',
+        // updatedBy: 'UpdatedBy',
+        // updatedDate: 'UpdatedDate'
     }
 };
 
 const fieldMapping = {
     [schema.columns.id]: 'id',
-    [schema.columns.name]: 'name',
-    [schema.columns.username]: 'username',
+    [schema.columns.firstName]: 'firstName',
+    [schema.columns.middleName]: 'middleName',
+    [schema.columns.lastName]: 'lastName',
     [schema.columns.email]: 'email',
     [schema.columns.password]: 'password',
+
     [schema.columns.role]: 'role',
-    [schema.columns.position]: 'position',
-    [schema.columns.created]: 'created',
-    [schema.columns.updated]: 'updated'
+    [schema.columns.gender]: 'gender',
+    [schema.columns.phone]: 'phone',
+    [schema.columns.address]: 'address',
+
+    // [schema.columns.isActive]: 'isActive',
+    // [schema.columns.isDelete]: 'isDelete',
+    [schema.columns.status]: 'status'
+
+    // [schema.columns.createdBy]: 'createdBy',
+    // [schema.columns.createdDate]: 'createdDate',
+    // [schema.columns.updatedBy]: 'updatedBy',
+    // [schema.columns.updatedDate]: 'updatedDate'
 }
 
 class UserModel {
@@ -74,32 +95,65 @@ class UserModel {
         try {
             const pool = await this.pool;
             const result = await pool.request()
-                .input('name', sql.NVarChar, user.name)
-                .input('username', sql.NVarChar, user.username)
+                .input('firstName', sql.NVarChar, user.firstName)
+                .input('middleName', sql.NVarChar, user.middleName)
+                .input('lastName', sql.NVarChar, user.lastName)
                 .input('email', sql.NVarChar, user.email)
                 .input('password', sql.NVarChar, user.password)
+
                 .input('role', sql.Int, user.role)
-                .input('position', sql.Int, user.position)
-                .query(`INSERT INTO ${schema.tableName} (${schema.columns.name}, ${schema.columns.username}, ${schema.columns.email}, ${schema.columns.password}, ${schema.columns.role}, ${schema.columns.position}) VALUES (@name, @username, @email, @password, @role, @position)`);
-            return null;
+                .input('gender', sql.NVarChar, user.gender)
+
+                .input('phone', sql.NVarChar, user.phone)
+                .input('address', sql.NVarChar, user.address)
+                .input('status', sql.NVarChar, 'Pending')
+
+                .query(`INSERT INTO ${schema.tableName} 
+                (${schema.columns.firstName}, ${schema.columns.lastName}, ${schema.columns.middleName}, ${schema.columns.email}, ${schema.columns.password}, ${schema.columns.role}, ${schema.columns.gender}, ${schema.columns.phone}, ${schema.columns.address}, ${schema.columns.status}) 
+                VALUES (@firstName, @middleName, @lastName, @email, @password, @role, @gender, @phone, @address,@status); 
+                SELECT TOP(1) * FROM tb_User
+                ORDER BY 1 DESC`);
+                if (!result.recordset[0]) {
+                    return null;
+                }
+                return mapFields(result.recordset[0], fieldMapping);
         } catch (error) {
             console.error('Error creating user:', error);
             throw new Error('Database Error');
         }
     }
 
-    async updateUser(userId, user) {
+        async updateUser(userId, user) {
+            const updateQuery = `
+        UPDATE ${schema.tableName} SET 
+        ${schema.columns.firstName} = @firstName, 
+        ${schema.columns.middleName} = @middleName, 
+        ${schema.columns.lastName} = @lastName, 
+        ${schema.columns.email} = @email, 
+        ${schema.columns.password} = @password, 
+        ${schema.columns.role} = @role, 
+        ${schema.columns.gender} = @gender, 
+        ${schema.columns.phone} = @phone, 
+        ${schema.columns.address} = @address 
+        WHERE ${schema.columns.id} = @userId`;
+
         try {
             const pool = await this.pool;
             const result = await pool.request()
-                .input('userId', sql.Int, userId)
-                .input('name', sql.NVarChar, user.name)
-                .input('username', sql.NVarChar, user.username)
-                .input('email', sql.NVarChar, user.email)
-                .input('password', sql.NVarChar, user.password)
-                .input('role', sql.Int, user.role)
-                .input('position', sql.Int, user.position)
-                .query(`UPDATE ${schema.tableName} SET ${schema.columns.name} = @name, ${schema.columns.username} = @username, ${schema.columns.email} = @email, ${schema.columns.password} = @password, ${schema.columns.role} = @role, ${schema.columns.position} = @position WHERE ${schema.columns.id} = @userId`);
+            .input('id', sql.Int, user.id)
+            .input('firstName', sql.NVarChar, user.firstName)
+            .input('middleName', sql.NVarChar, user.middleName)
+            .input('lastName', sql.NVarChar, user.lastName)
+            .input('email', sql.NVarChar, user.email)
+            .input('password', sql.NVarChar, user.password)
+
+            .input('role', sql.Int, user.role)
+            .input('gender', sql.NVarChar, user.gender)
+
+            .input('phone', sql.NVarChar, user.phone)
+            .input('address', sql.NVarChar, user.address)
+
+            .query(updateQuery)
             return null;
         } catch (error) {
             console.error('Error updating user:', error);
