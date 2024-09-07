@@ -47,11 +47,13 @@ class questionOptionModel {
             const pool = await this.pool;
             const result = await pool.request()
                 .input('QuestionId', sql.Int, QuestionId)
-                .query(`SELECT * FROM ${schema.tableName} WHERE ${schema.columns.testId} = @QuestionId`);
+                .query(`SELECT id, options, QuestionId as questionId FROM ${schema.tableName} WHERE ${schema.columns.questionId} = @QuestionId`);
             if (!result.recordset[0]) {
                 return null;
             }
-            return mapFields(result.recordset[0], fieldMapping);
+            else{
+               return result.recordset
+            }
         } catch (error) {
             console.error('Error fetching Options by QuestionId:', error);
             throw new Error('Database Error');

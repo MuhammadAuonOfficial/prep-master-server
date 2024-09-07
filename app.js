@@ -17,6 +17,7 @@ const userRoutes = require('./src/routes/userRoutes');
 const authRoutes = require('./src/routes/authRoutes');
 const testSeriesRoutes = require('./src/routes/testSeriesRoutes');
 const questionRoutes = require('./src/routes/questionRoutes');
+const questionOptionsRoutes = require('./src/routes/questionOptionsRoutes');
 
 
 
@@ -36,6 +37,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/test_series', testSeriesRoutes);
 app.use('/api/question', questionRoutes);
+app.use('/api/questionOptions', questionOptionsRoutes);
 
 app.use(errorHandler);
 

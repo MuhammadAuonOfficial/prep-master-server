@@ -29,8 +29,8 @@ class questionModel {
             const pool = await this.pool;
             const result = await pool.request()
                 .input('questionId', sql.Int, questionId)
-                .query(`SELECT * FROM ${schema.tableName} WHERE ${schema.columns.id} = @questionId`);
-            return mapFields(result.recordset[0], fieldMapping);
+                .query(`SELECT id, TestId as testId, Question as question, Answer as answer FROM ${schema.tableName} WHERE ${schema.columns.id} = @questionId`);
+            return result.recordset;
         } catch (error) {
             console.error('Error fetching test series by ID:', error);
             throw new Error('Database Error');

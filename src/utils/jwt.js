@@ -5,10 +5,10 @@ const SECRET_KEY = process.env.JWT_SECRET || 'secret';
 
 const generateToken = (user) => {
     const payload = {
-        id: user.id, // Subject (user ID)
+        id: user.id, 
         name: user.username,
         email: user.email,
-        role: user.roleId,
+        role: user.role ,
         // permissions: user.permissions For future use
     };
 

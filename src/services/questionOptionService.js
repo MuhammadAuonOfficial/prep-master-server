@@ -24,14 +24,15 @@ const getAllquestionOption = async () => {
     return questionOptions;
 }
 
-const getquestionOptionByQuestionId = async (TestId) => {
-    if (!TestId) {
-        const error = new Error('TestId is required');
+const getquestionOptionByQuestionId = async (QuestionId) => {
+    if (!QuestionId) {
+        const error = new Error('QuestionId is required');
         error.statusCode = 400;
         throw error;
     }
 
-    const questionOption = await questionOptionModel.getquestionOptionByQuestionId(TestId);
+    const questionOption = await questionOptionModel.getquestionOptionByQuestionId(QuestionId);
+    console.log(questionOption, 'dasdad')
 
     return questionOption;
 }
@@ -43,7 +44,7 @@ const createquestionOption = async (questionOption) => {
         throw error
     }
 
-    const newquestionOption = await questionOptionModel.createquestionOption(questionOption);
+    const newquestionOption = await questionOptionModel.createQuestionOption(questionOption);
 
     return newquestionOption;
 }
@@ -61,7 +62,7 @@ const updatequestionOption = async (questionOptionId, questionOption) => {
         throw error;
     }
 
-    const updatedquestionOption = await questionOptionModel.updatequestionOption(questionOptionId, questionOption);
+    const updatedquestionOption = await questionOptionModel.updateQuestionOption(questionOptionId, questionOption);
 
     return updatedquestionOption;
 }
